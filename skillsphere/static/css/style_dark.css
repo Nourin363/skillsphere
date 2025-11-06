@@ -1,0 +1,267 @@
+:root {
+    --chat-bg: #1a1c2e;
+    --chat-header-bg: #12142a;
+    --chat-header-color: #ffca28;
+    --chat-msg-bg: #10111b;
+    --chat-user-bg: #272a40;
+    --chat-bot-bg: #2f324d;
+    --chat-btn-bg: #ffca28;
+    --chat-btn-color: #12142a;
+    --chat-btn-hover: #ffb300;
+}
+/* 🌙 SkillSphere — Dark Mode Stylesheet */
+/* ---------------------------------------------- */
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #0f111a;
+    color: #e0e0e0;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #12142a;
+    color: #fff;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #272a40;
+}
+
+.nav-links a {
+    color: #ddd;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffca28;
+}
+
+/* Hero Section */
+.hero {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #1e1e3a, #2c2c5a);
+    color: white;
+    text-align: center;
+    flex-direction: column;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #ffca28;
+    color: #12142a;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+.btn:hover {
+    background: #ffb300;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #12142a;
+    color: #fff;
+    border-top: 1px solid #272a40;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background-color: #12142a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar ul li a {
+    color: #ddd;
+    text-decoration: none;
+    font-weight: 500;
+}
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+    color: #ffca28;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 240px;
+    padding: 30px;
+    background: #0f111a;
+}
+
+/* Cards */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.card {
+    background: #1a1c2e;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+    min-width: 250px;
+    color: #eee;
+}
+.card:hover {
+    transform: translateY(-5px);
+    background: #20233a;
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    margin-top: 8px;
+}
+.progress-bar span {
+    display: block;
+    height: 10px;
+    background: #ffca28;
+    border-radius: 5px;
+}
+
+/* Profile Page */
+.profile-card {
+    background: #1a1c2e;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    width: 400px;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    margin: 0 auto;
+}
+.profile-pic {
+    width: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+/* Authentication Pages */
+.auth-page {
+    background: linear-gradient(135deg, #10122a, #212453);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.auth-box {
+    background: #1a1c2e;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    text-align: center;
+    width: 400px;
+    color: #fff;
+}
+.auth-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #12142a;
+    color: #fff;
+}
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    background: #ffca28;
+    color: #12142a;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+}
+.auth-box button:hover {
+    background: #ffb300;
+}
+.switch-text a {
+    color: #ffca28;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Chatbot */
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    width: 320px;
+    background: #1a1c2e;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(255,255,255,0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+}
+.chatbot-header {
+    background: #12142a;
+    color: #ffca28;
+    text-align: center;
+    padding: 10px;
+    font-weight: 600;
+}
+.chatbot-messages {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.chatbot-message.user {
+    background: #272a40;
+    align-self: flex-end;
+    padding: 8px;
+    border-radius: 8px;
+}
+.chatbot-message.bot {
+    background: #2f324d;
+    align-self: flex-start;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .auth-box {
+        width: 90%;
+    }
+}

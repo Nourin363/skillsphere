@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SkillSphere | Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link id="theme-style" rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<body class="bg-gray-50 font-[Inter]">
+  {% include 'navbar.html' %}
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <h1 class="text-3xl font-bold mb-6 text-gray-900">Welcome, {{ user.username }} 👋</h1>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-blue-600 text-white p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold">Skills Mastered</h3>
+        <p class="text-3xl font-bold mt-2">{{ user.profile.skills_mastered|default:0 }}</p>
+      </div>
+      <div class="bg-purple-600 text-white p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold">XP Points</h3>
+        <p class="text-3xl font-bold mt-2">{{ user.profile.points|default:0 }}</p>
+      </div>
+      <div class="bg-green-600 text-white p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold">Internships</h3>
+        <p class="text-3xl font-bold mt-2">{{ user.profile.internships|default:0 }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="chatbot-container">
+    <div class="chatbot-header">💬 Mentor AI Assistant</div>
+    <div class="chatbot-messages" id="chat-messages"></div>
+    <div class="chatbot-input">
+      <input type="text" id="chat-input" placeholder="Ask me about your skills...">
+      <button id="chat-send">Send</button>
+    </div>
+  </div>
+</body>
+</html>
