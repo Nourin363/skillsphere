@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-b from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-500 px-6 py-16">
+  <div class="w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8">
+    
+    <h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
+      ✏️ Edit Profile
+    </h1>
+    <p class="text-center text-gray-500 dark:text-gray-400 mb-8">
+      Update your personal information below.
+    </p>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- First Name -->
+      <div>
+        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"
+          class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-purple-500 outline-none transition"
+          required>
+      </div>
+
+      <!-- Last Name -->
+      <div>
+        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"
+          class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-purple-500 outline-none transition"
+          required>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}"
+          class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-purple-500 outline-none transition"
+          required>
+      </div>
+
+      <!-- Profile Bio -->
+      <div>
+        <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
+        <textarea id="bio" name="bio" rows="3" placeholder="Write a short bio..."
+          class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-purple-500 outline-none transition">{{ profile.bio }}</textarea>
+      </div>
+
+      <!-- Profile Picture -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profile Picture</label>
+        {% if profile.image %}
+          <img src="{{ profile.image.url }}" alt="Profile Picture" class="w-20 h-20 rounded-full mb-2 object-cover">
+        {% endif %}
+        <input type="file" name="image"
+          class="block w-full text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md p-1.5 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-purple-500 transition">
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button type="submit" 
+          class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2.5 rounded-lg hover:from-purple-600 hover:to-blue-600 transition transform hover:scale-[1.02]">
+          💾 Save Changes
+        </button>
+      </div>
+
+      <!-- Back to Profile -->
+      <div class="text-center mt-3">
+        <a href="{% url 'profile' %}" class="text-sm text-purple-600 dark:text-purple-400 hover:underline">← Back to Profile</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

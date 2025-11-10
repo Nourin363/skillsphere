@@ -15,24 +15,59 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from .import views
 from django.contrib.auth import views as auth_views
+from app import views
 
 urlpatterns = [
+    # ---------------- 🌐 PUBLIC ----------------
     path('', views.index, name='index'),
 
-    # Authentication
+    # ---------------- 🔐 AUTHENTICATION ----------------
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('logout/', views.logout_view, name='logout'),
 
-    # User Pages
+    # ---------------- 👤 USER AREA ----------------
     path('dashboard/', views.dashboard, name='dashboard'),
     path('skills/', views.skills, name='skills'),
+    path('skills/add/', views.add_skill, name='add_skill'),
+    path('skills/<int:skill_id>/edit/', views.edit_skill, name='edit_skill'),
+    path('skills/<int:skill_id>/delete/', views.delete_skill, name='delete_skill'),
+
     path('internships/', views.internships, name='internships'),
     path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
 
-    # Password reset (optional)
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+
+    # 📨 Internship Application (new)
+    path('apply_internship/', views.apply_internship, name='apply_internship'),
+
+    # ---------------- 🔑 PASSWORD RESET FLOW ----------------
+    # Step 1: Request reset
+    path(
+        'password_reset/',
+        auth_views.PasswordResetView.as_view(template_name='password_reset.html'),
+        name='password_reset'
+    ),
+
+    # Step 2: Email sent confirmation
+    path(
+        'password_reset_done/',
+        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
+        name='password_reset_done'
+    ),
+
+    # Step 3: Reset link confirmation (via email)
+    path(
+        'reset/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
+        name='password_reset_confirm'
+    ),
+
+    # Step 4: Completion message
+    path(
+        'reset/done/',
+        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
+        name='password_reset_complete'
+    ),
 ]

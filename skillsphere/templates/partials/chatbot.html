@@ -1,0 +1,63 @@
+<!-- 🤖 SkillSphere AI Mentor Chatbot Widget -->
+<div 
+  x-data="{ open: false, messages: [], userInput: '' }"
+  class="fixed bottom-6 right-6 z-50"
+>
+  <!-- 💬 Floating Chatbot Button -->
+  <button 
+    @click="open = !open"
+    class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 
+           hover:from-purple-600 hover:to-blue-600 text-white rounded-full shadow-lg transition transform hover:scale-105"
+    title="Chat with Mentor"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3h6m-6 3h9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </button>
+
+  <!-- 💬 Chatbot Window -->
+  <div 
+    x-show="open" 
+    x-transition
+    class="w-80 sm:w-96 mt-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl flex flex-col overflow-hidden"
+  >
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 flex justify-between items-center">
+      <h2 class="font-semibold text-sm">AI Mentor</h2>
+      <button @click="open = false" class="text-white hover:text-yellow-300 transition">&times;</button>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="flex-1 overflow-y-auto p-3 space-y-2 max-h-72" id="chat-scroll">
+      <template x-for="(msg, index) in messages" :key="index">
+        <div 
+          :class="msg.sender === 'user' 
+                  ? 'self-end bg-blue-600 text-white rounded-lg px-3 py-2 max-w-[75%] ml-auto' 
+                  : 'self-start bg-gray-100 dark:bg-gray-800 dark:text-gray-200 rounded-lg px-3 py-2 max-w-[75%]'"
+        >
+          <p x-text="msg.text"></p>
+        </div>
+      </template>
+      <div x-show="messages.length === 0" class="text-gray-400 dark:text-gray-500 text-center py-4 text-sm">
+        👋 Hi! Ask me about your skills, tasks, or internships.
+      </div>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2">
+      <input 
+        x-model="userInput"
+        @keyup.enter="if(userInput.trim()){ messages.push({ text: userInput, sender: 'user' }); userInput=''; $nextTick(() => { $el.querySelector('#chat-scroll').scrollTop = $el.querySelector('#chat-scroll').scrollHeight; }); }"
+        type="text"
+        placeholder="Type your message..."
+        class="flex-1 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+      <button 
+        @click="if(userInput.trim()){ messages.push({ text: userInput, sender: 'user' }); userInput=''; $nextTick(() => { $el.querySelector('#chat-scroll').scrollTop = $el.querySelector('#chat-scroll').scrollHeight; }); }"
+        class="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-3 py-2 text-sm font-medium transition"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+</div>

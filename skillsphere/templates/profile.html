@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-b from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-500 px-6 py-16">
+  <div class="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 text-center">
+    
+    <!-- Profile Image / Icon -->
+    <div class="relative mx-auto w-24 h-24 mb-6">
+      {% if profile.image %}
+        <img src="{{ profile.image.url }}" alt="Profile Picture" 
+             class="w-24 h-24 rounded-full object-cover ring-4 ring-purple-500 mx-auto transition-all duration-300 hover:scale-105">
+      {% else %}
+        <div class="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mx-auto ring-4 ring-purple-400 shadow-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zM12 14c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z"/>
+          </svg>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- User Info -->
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white capitalize">{{ user.first_name|default:user.username }}</h2>
+    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">{{ user.email }}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-xs mb-6">
+      Joined on {{ user.date_joined|date:"F d, Y" }}
+    </p>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-4 text-sm text-gray-700 dark:text-gray-300 mb-6">
+      <div>
+        <h3 class="text-lg font-bold text-purple-500">{{ total_skills|default:0 }}</h3>
+        <p class="text-xs uppercase tracking-wide">Skills</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-blue-500">{{ total_internships|default:0 }}</h3>
+        <p class="text-xs uppercase tracking-wide">Internships</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-green-500">{{ avg_progress|default:"0" }}%</h3>
+        <p class="text-xs uppercase tracking-wide">Progress</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-3">
+      <a href="{% url 'dashboard' %}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">
+        Back to Dashboard
+      </a>
+      <a href="{% url 'edit_profile' %}" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-md transition">
+        Edit Profile
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

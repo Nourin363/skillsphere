@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" x-data>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillSphere</title>
+
+  <!-- 🌈 Tailwind CSS -->
+  <script>
+    tailwind = { config: { darkMode: 'class' } };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ⚙️ Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- 🔷 Favicon -->
+  <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}" />
+
+  <!-- 🎨 Animation & Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/animation.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style_dark.css' %}">
+</head>
+
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen">
+
+  <!-- ✨ Cinematic overlay for theme transition -->
+  <div id="fade-overlay"></div>
+
+  <!-- 🧭 Conditional Navbar -->
+  {% include 'navbar.html' %}
+
+
+
+  <!-- ✅ Toast Notifications -->
+  {% if messages %}
+  <div 
+       x-data="{ show: true }"
+       x-show="show"
+       x-init="setTimeout(() => show = false, 3000)"
+       class="fixed top-5 right-5 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg z-50 animate-slide-in">
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 📄 Page Content -->
+  <main class="min-h-screen px-4 py-12 flex items-center justify-center">
+  {% block content %}{% endblock %}
+</main>
+
+  <!-- 🧾 Footer -->
+  <footer class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+    © {% now "Y" %} SkillSphere. All rights reserved.
+  </footer>
+
+  <!-- 💫 JS Animation + Dark Mode Handling -->
+  <script src="{% static 'js/animation.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- 🌙 Dark Mode Toggle Script -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const themeToggleBtn = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
+    const themeText = document.getElementById("theme-text");
+    const overlay = document.getElementById("fade-overlay");
+
+    if (!themeToggleBtn) return;
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      if (themeIcon) themeIcon.textContent = "☀️";
+      if (themeText) themeText.textContent = "Light Mode";
+    }
+
+    // Smooth overlay animation
+    function runFadeTint(toDark) {
+      const tint = toDark ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)';
+      overlay?.style.setProperty('--fade-bg', tint);
+      document.body.classList.add('fade-active');
+      setTimeout(() => document.body.classList.remove('fade-active'), 500);
+    }
+
+    // Toggle dark mode
+    themeToggleBtn.addEventListener("click", () => {
+      const goingToDark = !document.documentElement.classList.contains("dark");
+      runFadeTint(goingToDark);
+      document.documentElement.classList.toggle("dark");
+
+      const isDark = document.documentElement.classList.contains("dark");
+      if (themeIcon) themeIcon.textContent = isDark ? "☀️" : "🌙";
+      if (themeText) themeText.textContent = isDark ? "Light Mode" : "Dark Mode";
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+  });
+  </script>
+
+  <!-- 🌫️ Overlay, Toast & Autofill Fix Styles -->
+  <style>
+    #fade-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--fade-bg, rgba(0,0,0,0.4));
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .5s ease;
+      z-index: 9999;
+    }
+    body.fade-active #fade-overlay { opacity: 1; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slide-in { animation: slideIn 0.4s ease forwards; }
+
+    /* ✅ Autofill fix for Chrome, Edge, Firefox */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important;
+      box-shadow: 0 0 0px 1000px #111827 inset !important;
+      -webkit-text-fill-color: #f9fafb !important;
+      caret-color: #f9fafb !important;
+      transition: background-color 9999s ease-in-out 0s !important;
+    }
+
+    html:not(.dark) input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+      box-shadow: 0 0 0px 1000px #ffffff inset !important;
+      -webkit-text-fill-color: #111827 !important;
+      caret-color: #111827 !important;
+    }
+  </style>
+
+  <!-- 💬 Chatbot (optional) -->
+  {% include 'partials/chatbot.html' %}
+  <style>
+/* ✅ Final Chrome Autofill Fix (dark + light modes) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s !important;
+  -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important; /* dark background */
+  box-shadow: 0 0 0px 1000px #111827 inset !important;
+  -webkit-text-fill-color: #f9fafb !important; /* text color white */
+  caret-color: #f9fafb !important;
+}
+
+html:not(.dark) input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important; /* light background */
+  box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #111827 !important;
+  caret-color: #111827 !important;
+}
+</style>
+
+</body>
+</html>
