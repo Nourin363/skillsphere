@@ -1,0 +1,32 @@
+{% extends "adminpanel/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/adminpanel.css' %}">
+
+<div class="content">
+
+    <div class="dashboard-title">✏ Edit Skill</div>
+
+    <form method="POST" class="skill-form">
+        {% csrf_token %}
+
+        <label>Skill Name</label>
+        <input type="text" name="name" value="{{ skill.name }}" required>
+
+        <label>Category</label>
+        <input type="text" name="category" value="{{ skill.category }}">
+
+        <label>Description</label>
+        <textarea name="description">{{ skill.description }}</textarea>
+
+        <label>Icon (optional)</label>
+        <input type="text" name="icon" value="{{ skill.icon }}">
+
+        <button type="submit" class="quick-btn blue" style="margin-top: 15px;">
+            💾 Update Skill
+        </button>
+    </form>
+
+</div>
+{% endblock %}

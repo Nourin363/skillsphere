@@ -1,0 +1,49 @@
+{% extends "adminpanel/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+
+    <h2 class="dashboard-title">👑 Admin Dashboard</h2>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <a href="{% url 'admin_user_skills' %}"  style="text-decoration: none; color: inherit;">
+                <span>Total Skills</span>
+                <h2>{{ total_skills }}</h2>
+            </a>
+        </div>
+
+
+        <div class="stat-card">
+            <span>Internships</span>
+            <h2>{{ total_internships }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <span>Applications</span>
+            <h2>{{ total_applications }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <span>Users Registered</span>
+            <h2>{{ total_users }}</h2>
+        </div>
+    </div>
+
+    <hr>
+
+    <h3 class="quick-title">⚙️ Quick Actions</h3>
+
+    <div class="quick-row">
+    <a href="{% url 'admin_skills' %}" class="quick-btn blue">⚙ Manage Skills</a>
+    <a href="{% url 'manage_users' %}" class="quick-btn red">👥 Manage Users</a>
+    <a href="{% url 'manage_internships' %}" class="quick-btn green">💼 Micro Internships</a>
+    <a href="{% url 'manage_tasks' %}" class="quick-btn purple">🧩 Manage Tasks</a>
+    <a href="{% url 'admin_announcements' %}" class="quick-btn pink">📢 Announcements</a>
+    <a href="{% url 'admin_logs' %}" class="quick-btn yellow">📊 Login Logs</a>
+    </div>
+
+
+</div>
+{% endblock %}

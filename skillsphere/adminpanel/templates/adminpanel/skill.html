@@ -1,0 +1,33 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+<h2 class="fw-bold mb-4">Manage Skills</h2>
+
+<a href="{% url 'add_skill' %}" class="btn btn-primary mb-3">+ Add Skill</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Skill Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in skills %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.description }}</td>
+            <td>
+                <a href="{% url 'edit_skill' s.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_skill' s.id %}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center text-muted">No skills added yet</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

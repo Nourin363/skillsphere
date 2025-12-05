@@ -1,0 +1,112 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Skill Practice Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+
+
+<h2 class="text-3xl font-bold text-white mb-6">➕ Add Skill Practice Task</h2>
+
+<form method="POST" class="bg-[#111121] p-6 rounded-xl shadow-lg max-w-xl">
+    {% csrf_token %}
+
+    <!-- Skill -->
+    <label class="text-gray-300 block mb-2">Skill</label>
+    <select name="skill" id="skillDropdown"
+            class="w-full p-3 rounded bg-gray-800 text-white mb-4" required>
+        {% for s in skills %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Title with suggestions -->
+    <label class="text-gray-300 block mb-2">Title</label>
+    <select name="title" id="titleDropdown"
+            class="w-full p-3 rounded bg-gray-800 text-white mb-4" required>
+        <option value="">Select a recommended topic</option>
+    </select>
+
+    <!-- Difficulty -->
+    <label class="text-gray-300 block mb-2">Difficulty</label>
+    <select name="difficulty"
+            class="w-full p-3 rounded bg-gray-800 text-white mb-4">
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+    </select>
+
+    <button type="submit"
+            class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold">
+        Save Task
+    </button>
+</form>
+
+<!-- 🔥 Title Suggestions Based on Skill -->
+<script>
+    const recommendations = {
+        "Python": [
+            "Loops & Conditionals",
+            "OOP Classes & Objects",
+            "File Handling",
+            "Exception Handling",
+            "Django Basics"
+        ],
+        "Java": [
+            "Constructor & Polymorphism",
+            "Interfaces & Abstract Classes",
+            "Collections Framework",
+            "Multithreading",
+            "JDBC Connectivity"
+        ],
+        "HTML": [
+            "HTML Forms",
+            "Semantic Layout",
+            "Tables",
+            "Media Embedding",
+            "HTML5 Structuring"
+        ],
+        "CSS": [
+            "Flexbox Design",
+            "Grid Layout",
+            "Positioning",
+            "Responsive Design",
+            "Animations"
+        ],
+        "JavaScript": [
+            "Array & Objects",
+            "Async/Await",
+            "DOM Manipulation",
+            "Fetch API",
+            "ES6 Concepts"
+        ]
+    };
+
+    const skillDropdown = document.getElementById("skillDropdown");
+    const titleDropdown = document.getElementById("titleDropdown");
+
+    function updateTitles() {
+        const skillName = skillDropdown.options[skillDropdown.selectedIndex].text;
+        const topics = recommendations[skillName] || [];
+        titleDropdown.innerHTML = `<option value="">Select a recommended topic</option>`;
+        topics.forEach(topic => {
+            titleDropdown.innerHTML += `<option value="${topic}">${topic}</option>`;
+        });
+    }
+
+    skillDropdown.addEventListener("change", updateTitles);
+    updateTitles(); // auto load for first option
+</script>
+<!-- 🔙 Back Button -->
+ <div class="mt-10">
+    <a href="{% url 'manage_tasks' %}"
+        class="inline-flex items-center px-4 py-2 mb-5 text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition">
+        ← Back
+    </a>
+</div>
+{% endblock %}

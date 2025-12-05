@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0f172a] to-[#211634] text-white py-12 px-6">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 items-start">
+
+    <!-- LEFT: Skill Card -->
+    <div class="col-span-1 bg-[#111827]/70 p-6 rounded-2xl shadow-lg border border-gray-800">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-gradient-to-br from-purple-600/20 to-blue-500/10 shadow-inner">
+          <i class="{{ skill.icon_class }} text-3xl"></i>
+        </div>
+
+        <div>
+          <h2 class="text-2xl font-bold">{{ skill.name }}</h2>
+          <p class="text-sm text-gray-400">
+            {{ skill.description|default:"Practice tasks and small challenges to sharpen your skills." }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="text-sm text-gray-300 mb-1">Overall Progress</div>
+        <div class="w-full bg-gray-700 h-3 rounded-full overflow-hidden shadow-inner">
+          <div id="progress-fill"
+               class="h-3 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all"
+               style="width: {{ user_skill.progress|default:0 }}%">
+          </div>
+        </div>
+        <div id="progress-label" class="text-xs text-gray-400 mt-2">
+          {{ user_skill.progress|default:0 }}%
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <button onclick="history.back()"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200">
+          ← Back
+        </button>
+      </div>
+
+      <div class="mt-6 text-sm text-gray-500">
+        Tip: complete problems to increase progress.
+      </div>
+    </div>
+
+    <!-- RIGHT: Practice Levels -->
+    <div class="col-span-2 bg-[#0b1220]/70 p-6 rounded-2xl shadow-lg border border-gray-800 overflow-y-auto"
+      style="max-height: 78vh;">
+      <div class="flex items-start justify-between mb-6">
+        <h3 class="text-xl font-semibold">Practice Problems</h3>
+        <div class="text-sm text-gray-400">Complete exercises to improve your score</div>
+      </div>
+    
+      <!-- All difficulty cards aligned in one vertical stack -->
+      <div id="levels-wrapper" class="flex flex-col space-y-6">
+        {% for lvl in levels %}
+        <div id="lvl-{{ lvl.name }}" class="bg-[#08111a] p-5 rounded-xl border border-gray-800 shadow">
+    
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-semibold flex items-center gap-2">
+              <span class="text-{{ lvl.color }}-400 text-xl">●</span>
+              {{ lvl.name }}
+            </h3>
+    
+            {% if lvl.unlocked %}
+            <span class="text-green-400 text-sm font-semibold">Unlocked</span>
+            {% else %}
+            <span class="text-red-400 text-sm font-semibold">Locked 🔒</span>
+            {% endif %}
+          </div>
+    
+          <p class="text-gray-400 text-sm mb-3">{{ lvl.completed }} / {{ lvl.total }} completed</p>
+    
+          <div class="w-full bg-gray-700 h-3 rounded-full mb-4 overflow-hidden">
+            <div class="h-3 bg-{{ lvl.color }}-500 rounded-full transition-all duration-300"
+              style="width: {{ lvl.progress }}%"></div>
+          </div>
+    
+          <div class="text-right">
+            {% if lvl.unlocked and lvl.total > 0 %}
+            <a href="{% url 'skill_hub' skill.slug lvl.name %}"
+              class="px-4 py-2 rounded-md bg-{{ lvl.color }}-600 hover:bg-{{ lvl.color }}-500 text-white transition">
+              {% if lvl.completed > 0 %}Continue{% else %}Start{% endif %}
+            </a>
+            {% else %}
+            <button class="px-4 py-2 rounded-md bg-gray-700 text-gray-500 cursor-not-allowed">Locked</button>
+            {% endif %}
+          </div>
+    
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    
+
+  </div>
+</section>
+
+{% endblock %}

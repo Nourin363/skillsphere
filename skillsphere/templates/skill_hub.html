@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="min-h-screen bg-[#0b1220] text-white py-12 px-6">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Skill Heading -->
+    <h1 class="text-4xl font-bold mb-8 text-center">{{ skill.name }}</h1>
+    <p class="text-center text-gray-400 mb-10">Choose how you want to learn</p>
+
+    <!-- Category Tiles -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- PDFs -->
+      <a href="{% url 'skill_detail' skill.id %}">
+        <div class="bg-gray-900/70 p-6 rounded-xl border border-gray-800 hover:bg-gray-800 transition shadow">
+          <div class="text-4xl mb-4">📘</div>
+          <h2 class="text-xl font-semibold mb-2">Class PDFs</h2>
+          <p class="text-gray-400 text-sm">{{ pdf_count }} available</p>
+        </div>
+      </a>
+
+      <!-- Notes -->
+      <a href="{% url 'skill_detail' skill.id %}">
+        <div class="bg-gray-900/70 p-6 rounded-xl border border-gray-800 hover:bg-gray-800 transition shadow">
+          <div class="text-4xl mb-4">📄</div>
+          <h2 class="text-xl font-semibold mb-2">Study Notes</h2>
+          <p class="text-gray-400 text-sm">{{ notes_count }} resources</p>
+        </div>
+      </a>
+
+      <!-- Practice -->
+      <a href="{% url 'skill_practice' slug=skill.slug %}">
+        <div class="bg-gray-900/70 p-6 rounded-xl border border-gray-800 hover:bg-gray-800 transition shadow">
+          <div class="text-4xl mb-4">📝</div>
+          <h2 class="text-xl font-semibold mb-2">Practice Questions</h2>
+          <p class="text-gray-400 text-sm">{{ practice_count }} tasks</p>
+        </div>
+      </a>
+
+      <!-- Quiz -->
+      <!-- Quiz -->
+        <a href="{% url 'skill_quiz' skill_slug=skill.slug %}">
+            <div class="bg-gray-900/70 p-6 rounded-xl border border-gray-800 hover:bg-gray-800 transition shadow">
+                <div class="text-4xl mb-4">📊</div>
+                <h2 class="text-xl font-semibold mb-2">Quiz Mode</h2>
+                <p class="text-gray-400 text-sm">Beginner → Expert</p>
+            </div>
+        </a>
+
+
+    </div>
+
+    <!-- Back button -->
+    <div class="text-center mt-12">
+      <a href="{% url 'skills' %}" class="px-6 py-2 bg-gray-700 rounded-lg hover:bg-gray-600">
+        ← Back to Skills
+      </a>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "adminpanel/base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Upload Study Material</h2>
+
+<form method="POST" enctype="multipart/form-data" class="space-y-4">
+  {% csrf_token %}
+
+  <select name="skill" class="input" required>
+    <option value="">Select Skill</option>
+    {% for s in skills %}
+      <option value="{{ s.id }}">{{ s.name }}</option>
+    {% endfor %}
+  </select>
+
+  <input type="text" name="title" class="input" placeholder="Title" required>
+
+  <textarea name="description" class="input" placeholder="Description (optional)"></textarea>
+
+  <select name="material_type" class="input" required>
+    <option value="class_pdf">Class PDF / Lesson</option>
+    <option value="task">Study Material</option>
+    <option value="quiz">Quiz Reference</option>
+  </select>
+
+  <input type="file" name="file" class="input">
+
+  <button class="btn-primary">Upload</button>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "adminpanel/base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Study Materials</h2>
+
+<form method="GET" class="mb-4">
+  <select name="skill" class="input" onchange="this.form.submit()">
+    <option value="">All Skills</option>
+    {% for s in skills %}
+      <option value="{{ s.id }}" {% if skill_filter == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<a href="{% url 'admin_add_material' %}" class="btn-primary mb-6">+ Add Material</a>
+
+<div class="space-y-3">
+  {% for m in materials %}
+    <div class="bg-[#0a1424] p-4 rounded-lg border border-gray-700 flex justify-between items-center">
+      <div>
+        <strong>{{ m.title }}</strong> — <span class="text-gray-400">{{ m.skill.name }}</span>
+        <div class="text-xs text-gray-500">{{ m.material_type }} | {{ m.created_at|date:"d M Y" }}</div>
+      </div>
+
+      <a href="{% url 'admin_delete_material' m.id %}" class="text-red-400 hover:text-red-300"
+         onclick="return confirm('Delete this material?');">Delete</a>
+    </div>
+  {% empty %}
+    <p class="text-gray-400">No materials found.</p>
+  {% endfor %}
+</div>
+{% endblock %}

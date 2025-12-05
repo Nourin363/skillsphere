@@ -1,0 +1,59 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Skill Task – SkillSphere Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<h1 class="text-3xl font-bold text-white mb-6">✏ Edit Skill Practice Task</h1>
+
+<form method="POST" class="bg-[#111121] p-6 rounded-xl shadow-lg max-w-2xl">
+    {% csrf_token %}
+
+    <!-- Skill -->
+    <label class="text-gray-300 block mb-2">Skill</label>
+    <select name="skill"
+        class="w-full p-3 rounded bg-gray-800 text-white mb-4"
+        required>
+        {% for s in skills %}
+            <option value="{{ s.id }}" {% if s.id == task.skill.id %}selected{% endif %}>
+                {{ s.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Question text -->
+    <label class="text-gray-300 block mb-2">Question</label>
+    <textarea name="question_text"
+        class="w-full p-3 rounded bg-gray-800 text-white mb-4"
+        rows="5"
+        required>{{ task.question_text }}</textarea>
+
+    <!-- Difficulty -->
+    <label class="text-gray-300 block mb-2">Difficulty</label>
+    <select name="difficulty"
+        class="w-full p-3 rounded bg-gray-800 text-white mb-4">
+        <option value="Beginner" {% if task.difficulty == 'Beginner' %}selected{% endif %}>Beginner</option>
+        <option value="Intermediate" {% if task.difficulty == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+        <option value="Advanced" {% if task.difficulty == 'Advanced' %}selected{% endif %}>Advanced</option>
+        <option value="Expert" {% if task.difficulty == 'Expert' %}selected{% endif %}>Expert</option>
+    </select>
+
+    <!-- Buttons -->
+    <div class="flex items-center gap-3 mt-6">
+        <button type="submit" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
+            💾 Update Task
+        </button>
+
+        <a href="{% url 'manage_tasks' %}"
+           class="px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-lg">
+            ← Back
+        </a>
+    </div>
+</form>
+
+{% endblock %}

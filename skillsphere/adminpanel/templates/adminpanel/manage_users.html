@@ -1,0 +1,55 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+
+    <!-- Tailwind for Admin UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<h1 class="text-3xl font-bold text-white mb-6">Manage Users</h1>
+
+<table class="w-full bg-[#111121] text-white rounded-lg overflow-hidden">
+  <thead class="bg-[#1c1c2d]">
+    <tr>
+      <th class="p-3 text-left">User</th>
+      <th class="p-3 text-left">Email</th>
+      <th class="p-3 text-left">Joined</th>
+      <th class="p-3 text-left">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr class="border-b border-gray-700">
+      <td class="p-3">{{ user.username }}</td>
+      <td class="p-3">{{ user.email }}</td>
+      <td class="p-3">{{ user.date_joined|date:"M d, Y" }}</td>
+      <td class="p-3 flex gap-4">
+        <a href="{% url 'send_update' user.id %}" class="text-purple-400 hover:text-purple-300 underline">
+          Send Update
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" class="p-4 text-center text-gray-400">No users found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="mt-10">
+    <a href="{% url 'admin_dashboard' %}"
+       class="inline-flex items-center px-6 py-2 text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition">
+        ← Back
+    </a>
+</div>
+
+
+
+
+{% endblock %}

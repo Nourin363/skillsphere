@@ -1,0 +1,64 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+{% load humanize %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+
+    <!-- Tailwind for Admin UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<h1 class="text-3xl font-bold text-white mb-2">📊 Login Logs</h1>
+<p class="text-gray-300 mb-6">Recent login activity is shown below.</p>
+
+{% if logs %}
+<table class="w-full text-sm">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>IP</th>
+            <th>Login Time</th>
+            <th>Logout Time</th>
+            <th>Time Spent</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.user.username }}</td>
+            <td>{{ log.ip_address }}</td>
+            <td>{{ log.login_time|naturaltime }}</td>
+            <td>
+                {% if log.logout_time %}
+                    {{ log.logout_time|naturaltime }}
+                {% else %}
+                    <span class="text-yellow-400">Active</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if log.session_duration %}
+                    {{ log.session_duration }}
+                {% else %}
+                    <span class="text-yellow-400">Active</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No login activity logged yet.</p>
+{% endif %}
+
+
+<a href="{% url 'admin_dashboard' %}"
+   class="inline-flex items-center px-4 py-2 mt-6 text-white bg-gray-700 hover:bg-gray-800 rounded-lg">
+    ← Back
+</a>
+
+{% endblock %}

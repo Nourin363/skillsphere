@@ -6,9 +6,7 @@
 
       <!-- 🌐 Logo -->
       <a href="/" class="flex items-center space-x-3 group">
-        <img src="{% static 'C:\Users\fathi\OneDrive\Desktop\skillsphere\skillsphere\static\images\skillphere_logo.png' %}" 
-             alt="SkillSphere logo" 
-             class="w-12 h-12 sm:w-14 sm:h-14 object-contain transform group-hover:scale-110 transition duration-300">
+        <img src="{% static 'images/skillphere_logo.png' %}" alt="SkillSphere Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain transform group-hover:scale-110 transition duration-300">
         <span class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 tracking-tight">
           SkillSphere
         </span>
@@ -16,82 +14,88 @@
 
       <!-- 🔗 Navigation Links -->
       <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
-
-        <!-- Home -->
-        <a href="/" 
-           class="relative {% if request.path == '/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400{% endif %} transition group">
+      
+        {% if not request.user.is_authenticated %}
+        <!-- BEFORE LOGIN — SHOW HOME -->
+        <a href="/"
+          class="{% if request.path == '/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600{% endif %}">
           Home
-          {% if request.path == '/' %}
-            <span class="absolute left-0 bottom-[-6px] w-full h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></span>
-          {% else %}
-            <span class="absolute left-0 bottom-[-6px] w-0 h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
-          {% endif %}
         </a>
+        {% endif %}
 
-        <!-- Skills -->
-        <a href="/skills/" 
-           class="relative {% if request.path == '/skills/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400{% endif %} transition group">
-          Skills
-          {% if request.path == '/skills/' %}
-            <span class="absolute left-0 bottom-[-6px] w-full h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></span>
-          {% else %}
-            <span class="absolute left-0 bottom-[-6px] w-0 h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
-          {% endif %}
-        </a>
-
-        <!-- Internships -->
-        <a href="/internships/" 
-           class="relative {% if request.path == '/internships/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400{% endif %} transition group">
-          Internships
-          {% if request.path == '/internships/' %}
-            <span class="absolute left-0 bottom-[-6px] w-full h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></span>
-          {% else %}
-            <span class="absolute left-0 bottom-[-6px] w-0 h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
-          {% endif %}
-        </a>
-
-        <!-- Dashboard -->
-        <a href="/dashboard/" 
-           class="relative {% if request.path == '/dashboard/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400{% endif %} transition group">
+      {% if request.user.is_authenticated %}
+        <!-- AFTER LOGIN — SHOW DASHBOARD -->
+        <a href="/dashboard/"
+          class="{% if request.path == '/dashboard/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600{% endif %}">
           Dashboard
-          {% if request.path == '/dashboard/' %}
-            <span class="absolute left-0 bottom-[-6px] w-full h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></span>
-          {% else %}
-            <span class="absolute left-0 bottom-[-6px] w-0 h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
-          {% endif %}
         </a>
+        {% endif %}
+
+
+        <!-- ALWAYS VISIBLE -->
+        <a href="/skills/"
+          class="{% if request.path == '/skills/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600{% endif %}">
+          Skills
+        </a>
+      
+        <a href="/internships/"
+          class="{% if request.path == '/internships/' %}text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 font-semibold{% else %}text-gray-700 dark:text-gray-300 hover:text-purple-600{% endif %}">
+          Internships
+        </a>
+      
+        {% if request.user.is_superuser %}
+        <a href="/adminpanel/">Admin Panel</a>
+        {% endif %}
+
       </div>
+
 
       <!-- 🌙 Theme Toggle + Auth/Profile -->
       <div class="flex items-center space-x-4">
         <!-- Theme Button -->
-        <button id="theme-toggle" 
+        <button id="theme-toggle"
                 class="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 focus:outline-none">
           <span id="theme-icon">🌙</span>
           <span id="theme-text" class="hidden sm:inline">Dark Mode</span>
         </button>
 
-        <!-- 👤 Profile or Auth Buttons -->
-        {% if user.is_authenticated %}
-          <div class="relative group">
-            <a href="{% url 'profile' %}" 
-               class="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-md hover:opacity-90 transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.779.607 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>{{ user.first_name|default:user.username }}</span>
-            </a>
+       
+
+        {% if request.user.is_authenticated %}
+          <!-- 👤 Profile Dropdown -->
+          <div class="relative" x-data="{ open: false }">
+            <button @click="open = !open"
+                    @keydown.escape="open = false"
+                    class="flex items-center gap-2 px-3 py-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold transition-all duration-300 ease-in-out shadow-md hover:scale-105"
+                    :class="{ 'rounded-xl px-4 pr-5': open }">
+              <div class="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full text-lg font-bold">
+                {{ request.user.username|first|upper }}
+              </div>
+              <span x-show="open" x-transition.opacity.duration.300ms>{{ request.user.username }}</span>
+            </button>
+
+            <div x-show="open"
+                 x-transition.origin.top.right
+                 @click.away="open = false"
+                 class="absolute right-0 mt-3 w-44 bg-[#1f2937] text-gray-200 rounded-xl shadow-lg border border-gray-700 z-50 overflow-hidden"
+                 style="display: none;">
+              <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-700 flex items-center gap-2">
+                <i class="fa-solid fa-id-badge text-blue-400"></i> <span>Profile</span>
+              </a>
+              <a href="{% url 'skill_progress' %}" class="block px-4 py-2 hover:bg-gray-700 flex items-center gap-2 text-red-400">
+                <i class="devicon-game-plain"></i> <span>Skill Progress</span> 
+              </a>
+              <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-700 flex items-center gap-2 text-red-400">
+                <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+              </a>
+            </div>
           </div>
         {% else %}
-          <a href="{% url 'login' %}" 
-             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">
-             Login
-          </a>
-          <a href="{% url 'register' %}" 
-             class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition">
-             Register
-          </a>
+          <!-- 🚪 Not Logged In -->
+          <div class="flex space-x-3">
+            <a href="{% url 'login' %}" class="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold hover:opacity-90 transition">Login</a>
+            <a href="{% url 'register' %}" class="px-5 py-2 rounded-xl border border-purple-500 text-purple-500 font-semibold hover:bg-purple-500 hover:text-white transition">Register</a>
+          </div>
         {% endif %}
       </div>
     </div>
@@ -107,7 +111,6 @@
   nav.scrolled {
     background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    transform: translateY(0);
   }
   .dark nav.scrolled {
     background-color: rgba(17, 24, 39, 0.95);
@@ -117,10 +120,7 @@
 <script>
   document.addEventListener("scroll", () => {
     const nav = document.getElementById("main-navbar");
-    if (window.scrollY > 10) {
-      nav.classList.add("scrolled");
-    } else {
-      nav.classList.remove("scrolled");
-    }
+    if (window.scrollY > 10) nav.classList.add("scrolled");
+    else nav.classList.remove("scrolled");
   });
 </script>

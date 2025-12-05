@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-2xl font-bold text-white mb-6">🎮 Skill Progress</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for us in user_skills %}
+    <div class="bg-gray-900 border border-gray-700 rounded-xl p-5 hover:border-indigo-500 transition">
+        
+        <div class="flex justify-between items-center mb-2">
+            <i class="{{ us.skill.icon }} colored text-4xl"></i>
+            <span class="bg-indigo-600 text-xs font-semibold px-3 py-1 rounded-md text-white">
+                LVL {{ us.level }}
+            </span>
+        </div>
+
+        <h3 class="text-lg font-semibold text-white">{{ us.skill.name }}</h3>
+        <p class="text-sm text-gray-300 -mt-1">{{ us.difficulty }}</p>
+
+        <p class="mt-2 text-sm text-gray-400">{{ us.xp }} XP / 600 XP</p>
+
+        <div class="w-full bg-gray-800 h-3 mt-1 rounded-full overflow-hidden progress-bar" data-progress="{{ us.progress }}">
+            <div class="h-full bg-yellow-400 inner-progress"></div>
+        </div>
+
+
+        <a href="{% url 'practice_skill' us.skill.id %}"
+           class="block text-center bg-yellow-400 hover:bg-yellow-300 text-black font-semibold mt-4 py-2 rounded-md">
+            ▶ Continue Learning
+        </a>
+    </div>
+    {% empty %}
+    <p class="text-gray-400 col-span-full text-center">No skills yet — Start learning from the Skills section!</p>
+    {% endfor %}
+</div>
+{% for message in messages %}
+<div class="fixed top-6 right-6 bg-yellow-400 text-black font-semibold shadow-xl px-5 py-3 rounded-lg animate-bounce">
+    {{ message }}
+</div>
+{% endfor %}
+
+<script>
+document.querySelectorAll('.progress-bar').forEach(bar => {
+    let target = bar.getAttribute("data-progress");
+    let inner = bar.querySelector(".inner-progress");
+    let width = 0;
+    let interval = setInterval(() => {
+        if (width >= target) clearInterval(interval);
+        else {
+            width++;
+            inner.style.width = width + "%";
+        }
+    }, 8);
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+{% if messages %}
+<script>
+    confetti({ particleCount: 150, spread: 90, origin: { y: 0.7 } });
+</script>
+
+{% for message in messages %}
+<div class="fixed top-5 right-5 bg-yellow-400 text-black px-6 py-3 rounded-xl font-semibold shadow-lg animate-bounce">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

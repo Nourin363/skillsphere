@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="min-h-screen bg-[#0b1220] text-white py-12 px-6">
+  <div class="max-w-4xl mx-auto bg-gray-900/70 p-8 rounded-xl shadow-xl border border-gray-800">
+
+    <!-- Question Header -->
+    <h1 class="text-3xl font-bold mb-6">{{ task.title }}</h1>
+    <p class="text-gray-300 text-lg mb-6">{{ task.question_text }}</p>
+
+    {% if task.file %}
+      <a href="{{ task.file.url }}" target="_blank"
+        class="px-4 py-2 bg-indigo-600 rounded-md hover:bg-indigo-500">
+        View Attachment
+      </a>
+    {% endif %}
+
+    <!-- Feedback after submission -->
+    {% if feedback %}
+      <div class="mt-8 p-4 rounded-lg {% if earned_xp %}bg-green-700{% else %}bg-red-700{% endif %}">
+        <p class="text-white text-lg font-semibold">{{ feedback }}</p>
+
+        {% if earned_xp %}
+          <p class="mt-2 text-sm text-green-200">XP Earned: +{{ earned_xp }}</p>
+        {% endif %}
+
+        {% if correct_answer_display %}
+          <p class="mt-2 text-sm text-gray-200">
+            Correct Answer: <span class="font-bold">{{ correct_answer_display }}</span>
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Answer Form -->
+    {% if not user_task.completed %}
+      <form method="POST" class="mt-10">
+        {% csrf_token %}
+
+        {% if task.question_type == "MCQ" %}
+          <div class="space-y-4">
+            <label class="block">
+              <input type="radio" name="answer" value="A" required> A) {{ task.option_a }}
+            </label>
+            <label class="block">
+              <input type="radio" name="answer" value="B" required> B) {{ task.option_b }}
+            </label>
+            <label class="block">
+              <input type="radio" name="answer" value="C" required> C) {{ task.option_c }}
+            </label>
+            <label class="block">
+              <input type="radio" name="answer" value="D" required> D) {{ task.option_d }}
+            </label>
+          </div>
+
+        {% else %}
+          <textarea name="answer" rows="5"
+            class="w-full bg-gray-800 p-4 rounded-lg text-white mt-4"
+            placeholder="Type your answer here..." required></textarea>
+        {% endif %}
+
+        <button type="submit"
+          class="mt-8 px-6 py-3 bg-green-600 rounded-lg text-white hover:bg-green-500">
+          Submit Answer
+        </button>
+      </form>
+    {% else %}
+      <!-- Already Completed UI -->
+      <div class="mt-10 p-4 rounded-lg bg-green-800">
+        <p class="text-green-200 font-semibold text-lg">
+          ✔ You have already completed this task and earned XP.
+        </p>
+      </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="mt-10 text-right">
+      <a href="{% url 'skill_practice' slug=skill.slug %}"
+        class="px-5 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
+        ← Back to Practice
+      </a>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'adminpanel/admin_base.html' %}
+
+{% block content %}
+
+<a href="{% url 'admin_user_skills' %}"
+   class="inline-flex items-center mb-4 px-4 py-2 rounded-lg bg-[#1c1c2d] hover:bg-[#26263a] text-sm text-white">
+    ← Back to User Skills
+</a>
+
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+        <h1 class="text-3xl font-bold text-white mb-1">{{ user_obj.username }}'s Skill Profile</h1>
+        <p class="text-gray-400 text-sm">
+            Joined user • Total {{ total_skills }} skill{{ total_skills|pluralize }}
+        </p>
+    </div>
+</div>
+
+<!-- Summary cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-[#111121] p-4 rounded-xl shadow-lg text-white text-center">
+        <p class="text-xs text-gray-400 mb-1">Total Skills</p>
+        <p class="text-2xl font-bold">{{ total_skills }}</p>
+    </div>
+
+    <div class="bg-[#111121] p-4 rounded-xl shadow-lg text-white text-center">
+        <p class="text-xs text-gray-400 mb-1">Total XP</p>
+        <p class="text-2xl font-bold">{{ total_xp }}</p>
+    </div>
+
+    <div class="bg-[#111121] p-4 rounded-xl shadow-lg text-white">
+        <p class="text-xs text-gray-400 mb-2">Average Progress</p>
+        <div class="w-full bg-gray-700 rounded-full h-3 mb-1">
+            <div class="bg-purple-500 h-3 rounded-full" style="width: {{ avg_progress }}%;"></div>
+        </div>
+        <p class="text-sm text-gray-300">{{ avg_progress }}% overall</p>
+    </div>
+
+    <div class="bg-[#111121] p-4 rounded-xl shadow-lg text-white text-center">
+        <p class="text-xs text-gray-400 mb-1">Highest Level</p>
+        <p class="text-2xl font-bold">{{ highest_level }}</p>
+    </div>
+</div>
+
+<!-- Skill cards -->
+<h2 class="text-2xl font-semibold text-white mb-4">Skill Breakdown</h2>
+
+{% if skills_qs %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for us in skills_qs %}
+    <div class="bg-[#111121] p-5 rounded-xl shadow-[0_0_15px_rgba(138,43,226,0.4)] hover:shadow-[0_0_20px_rgba(138,43,226,0.8)] transition duration-300 text-white">
+
+        <h3 class="text-lg font-bold mb-1">{{ us.skill.name }}</h3>
+        <p class="text-xs text-gray-400 mb-3">Difficulty: {{ us.difficulty }}</p>
+
+        <div class="mb-3">
+            <p class="text-xs text-gray-300 mb-1">Progress</p>
+            <div class="w-full bg-gray-700 rounded-full h-3">
+                <div class="bg-green-400 h-3 rounded-full" style="width: {{ us.progress }}%;"></div>
+            </div>
+            <p class="text-xs text-gray-300 mt-1">{{ us.progress }}% complete</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 mb-3 text-center">
+            <div class="bg-[#1e1e2d] p-2 rounded-lg">
+                <p class="text-[10px] text-gray-400">XP</p>
+                <p class="text-lg font-bold">{{ us.xp }}</p>
+            </div>
+            <div class="bg-[#1e1e2d] p-2 rounded-lg">
+                <p class="text-[10px] text-gray-400">Level</p>
+                <p class="text-lg font-bold">{{ us.level }}</p>
+            </div>
+        </div>
+
+        <p class="text-[11px] text-gray-500">
+            Last updated: {{ us.updated_at|date:"M d, Y H:i" }}
+        </p>
+
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-gray-400 text-sm">This user has not selected any skills yet.</p>
+{% endif %}
+
+{% endblock %}

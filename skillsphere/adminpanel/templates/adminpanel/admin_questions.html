@@ -1,0 +1,84 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+
+    <!-- Tailwind for Admin UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+
+<h1 class="text-3xl font-bold text-white mb-6">Practice Questions</h1>
+
+<div class="flex justify-between items-center mb-6">
+  <form method="get" class="flex gap-3 flex-wrap">
+    <select name="skill"
+      class="p-2 rounded bg-[#1b1b29] text-white border border-[#34344d]">
+      <option value="">All Skills</option>
+      {% for skill in skills %}
+      <option value="{{ skill.id }}" {% if skill_filter|default:''|stringformat:"s" == skill.id|stringformat:"s" %}selected{% endif %}>
+        {{ skill.name }}
+      </option>
+      {% endfor %}
+    </select>
+
+    <select name="difficulty"
+      class="p-2 rounded bg-[#1b1b29] text-white border border-[#34344d]">
+      <option value="">All Difficulty</option>
+      <option value="Beginner" {% if difficulty_filter == 'Beginner' %}selected{% endif %}>Beginner</option>
+      <option value="Intermediate" {% if difficulty_filter == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+      <option value="Advanced" {% if difficulty_filter == 'Advanced' %}selected{% endif %}>Advanced</option>
+      <option value="Expert" {% if difficulty_filter == 'Expert' %}selected{% endif %}>Expert</option>
+    </select>
+
+    <button type="submit"
+      class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded text-white">
+      Filter
+    </button>
+  </form>
+
+  <a href="{% url 'admin_add_question' %}"
+     class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white">
+    + Add Question
+  </a>
+</div>
+
+<table class="w-full bg-[#111121] text-white rounded-xl overflow-hidden">
+  <thead class="bg-[#1c1c2d]">
+    <tr>
+      <th class="p-3 text-left">Skill</th>
+      <th class="p-3 text-left">Type</th>
+      <th class="p-3 text-left">Difficulty</th>
+      <th class="p-3 text-left">Question</th>
+      <th class="p-3 text-left">XP</th>
+      <th class="p-3 text-left">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for q in questions %}
+    <tr class="border-t border-gray-700">
+      <td class="p-3">{{ q.skill.name }}</td>
+      <td class="p-3">{{ q.get_question_type_display }}</td>
+      <td class="p-3">{{ q.difficulty }}</td>
+      <td class="p-3 text-sm">{{ q.question_text|truncatechars:60 }}</td>
+      <td class="p-3">{{ q.xp_reward }}</td>
+      <td class="p-3 flex gap-3">
+        <a href="{% url 'admin_edit_question' q.id %}" class="text-yellow-400 hover:text-yellow-300 underline">Edit</a>
+        <a href="{% url 'admin_delete_question' q.id %}" class="text-red-400 hover:text-red-300 underline"
+           onclick="return confirm('Delete this question?');">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6" class="p-4 text-center text-gray-400">No questions found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

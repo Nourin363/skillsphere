@@ -1,0 +1,46 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+
+<h1 class="text-3xl font-bold text-white mb-8">Manage Users</h1>
+
+<form method="get" class="mb-6 max-w-md">
+  <input type="text" name="search" value="{{ search }}" placeholder="🔍 Search users..."
+    class="w-full p-3 bg-[#1b1b29] rounded-lg text-white border border-[#34344d]">
+</form>
+
+<table class="w-full bg-[#111121] text-white rounded-xl overflow-hidden">
+  <thead class="bg-[#1c1c2d]">
+    <tr>
+      <th class="p-3 text-left">Username</th>
+      <th class="p-3 text-left">Email</th>
+      <th class="p-3 text-left">Status</th>
+      <th class="p-3 text-left">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for user in users %}
+    <tr class="border-t border-gray-700">
+      <td class="p-3">{{ user.username }}</td>
+      <td class="p-3">{{ user.email }}</td>
+      {% if user.profile.is_blocked %}
+          <td class="p-3 text-red-400 font-bold">Blocked</td>
+      {% else %}
+          <td class="p-3 text-green-400 font-bold">Active</td>
+      {% endif %}
+
+      <td class="p-3 flex flex-wrap gap-3">
+        <a href="{% url 'send_announcement' user.id %}" class="text-purple-400 hover:text-purple-300 underline">📩 Send Update</a>
+
+        {% if user.profile.is_blocked %}
+        <a href="{% url 'unblock_user' user.id %}" class="text-green-400 hover:text-green-300 underline">✔ Unblock</a>
+        {% else %}
+        <a href="{% url 'block_user' user.id %}" class="text-red-400 hover:text-red-300 underline">🚫 Block</a>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

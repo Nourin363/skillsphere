@@ -14,11 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, include
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from app import views
+from app.views import dashboard, skill_data
+
+
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('adminpanel/', include('adminpanel.urls')),
+    # path('', include('app.urls')),
+
     # ---------------- 🌐 PUBLIC ----------------
     path('', views.index, name='index'),
 
@@ -29,10 +37,25 @@ urlpatterns = [
 
     # ---------------- 👤 USER AREA ----------------
     path('dashboard/', views.dashboard, name='dashboard'),
+    path("skills/data/", skill_data, name="skill_data"),
+
     path('skills/', views.skills, name='skills'),
+    path('skills/practice/<slug:slug>/', views.skill_practice, name='skill_practice'),
     path('skills/add/', views.add_skill, name='add_skill'),
     path('skills/<int:skill_id>/edit/', views.edit_skill, name='edit_skill'),
     path('skills/<int:skill_id>/delete/', views.delete_skill, name='delete_skill'),
+    path('skills/progress/', views.skill_progress, name='skill_progress'),
+    path('skill/<int:skill_id>/', views.skill_detail, name='skill_detail'),
+    path('skill/<slug:skill_slug>/task/<int:task_id>/', views.task_detail, name='task_detail'),
+    path("skill/<slug:skill_slug>/hub/<str:difficulty>/", views.skill_hub, name="skill_hub"),
+    path('skill/<slug:skill_slug>/quiz/', views.skill_quiz, name='skill_quiz'),
+
+
+
+
+
+    path("skills/<slug:slug>/task/<int:task_id>/open/", views.task_open, name="task_open"),
+    path("skills/complete/", views.complete_task, name="complete_task"),
 
     path('internships/', views.internships, name='internships'),
     path('profile/', views.profile, name='profile'),
@@ -70,4 +93,5 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
         name='password_reset_complete'
     ),
+    
 ]

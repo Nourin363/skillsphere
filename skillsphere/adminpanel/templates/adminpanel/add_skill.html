@@ -1,0 +1,43 @@
+{% extends "adminpanel/admin_base.html" %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+
+    <!-- Tailwind for Admin UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<link rel="stylesheet" href="{% static 'css/adminpanel.css' %}">
+
+<div class="content">
+
+    <div class="dashboard-title">➕ Add New Skill</div>
+
+    <form method="POST" class="skill-form">
+        {% csrf_token %}
+
+        <label>Skill Name</label>
+        <input type="text" name="name" placeholder="Enter Skill Name" required>
+
+        <label>Category</label>
+        <input type="text" name="category" placeholder="Ex: Programming, Web Dev, AI">
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Optional: Describe this skill"></textarea>
+
+        <label>Icon (optional)</label>
+        <input type="text" name="icon" placeholder="Ex: devicon-python-plain colored">
+
+        <button type="submit" class="quick-btn yellow" style="margin-top: 15px;">
+            💾 Save Skill
+        </button>
+    </form>
+
+</div>
+{% endblock %}

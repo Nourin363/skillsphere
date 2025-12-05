@@ -1,0 +1,113 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+
+    <!-- Tailwind for Admin UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<h1 class="text-3xl font-bold text-white mb-8">Leaderboard</h1>
+
+<!-- Skill Dropdown -->
+<form method="get" class="mb-8 max-w-xs">
+    <select name="skill"
+        class="w-full p-3 rounded-lg bg-[#1b1b29] text-white border border-[#34344d] focus:ring-2 focus:ring-purple-500 outline-none"
+        onchange="this.form.submit()">
+        <option value="">Select Skill</option>
+        {% for skill in skills %}
+        <option value="{{ skill.name }}" {% if selected_skill == skill.name %}selected{% endif %}>
+            {{ skill.name }}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if not selected_skill %}
+<p class="text-gray-400">Please select a skill to view the leaderboard.</p>
+{% endif %}
+
+{% if selected_skill %}
+<!-- 🔥 Top 3 Performers -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+    {% for us in top_three %}
+    <div class="bg-[#111121] p-6 rounded-xl shadow-[0_0_18px_rgba(138,43,226,0.35)] hover:shadow-[0_0_24px_rgba(138,43,226,0.6)] transition text-white">
+
+        <div class="flex items-center gap-3 mb-3">
+            {% if forloop.counter == 1 %}
+            <img src="https://cdn-icons-png.flaticon.com/512/2583/2583343.png" class="w-7">
+            {% elif forloop.counter == 2 %}
+            <img src="https://cdn-icons-png.flaticon.com/512/2583/2583387.png" class="w-7">
+            {% elif forloop.counter == 3 %}
+            <img src="https://cdn-icons-png.flaticon.com/512/2583/2583300.png" class="w-7">
+            {% endif %}
+            <h2 class="text-xl font-bold">{{ us.user.username }}</h2>
+        </div>
+
+        <p class="text-sm mb-2"><span class="font-semibold">Level:</span> {{ us.level }}</p>
+        <p class="text-sm mb-2"><span class="font-semibold">XP:</span> {{ us.xp }}</p>
+        <p class="text-sm"><span class="font-semibold">Progress:</span> {{ us.progress }}%</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- 📋 Remaining Users -->
+<table class="min-w-full bg-[#111121] text-white rounded-xl overflow-hidden">
+    <thead class="bg-[#1c1c2d]">
+        <tr>
+            <th class="p-3 text-left">Rank</th>
+            <th class="p-3 text-left">User</th>
+            <th class="p-3 text-left">XP</th>
+            <th class="p-3 text-left">Level</th>
+            <th class="p-3 text-left">Progress</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for us in remaining %}
+        <tr class="border-t border-gray-700">
+            <td class="p-3">#{{ forloop.counter|add:3 }}</td>
+            <td class="p-3">{{ us.user.username }}</td>
+            <td class="p-3">{{ us.xp }}</td>
+            <td class="p-3">{{ us.level }}</td>
+            <td class="p-3">{{ us.progress }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- 📊 XP BAR GRAPH -->
+<div class="mt-14 bg-[#111121] p-6 rounded-xl shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-white">Top Performers — XP Comparison</h2>
+    <canvas id="xpChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById("xpChart");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: {{ chart_labels|safe }},
+      datasets: [{
+        label: "XP",
+        data: {{ chart_data|safe }},
+        borderWidth: 1,
+        backgroundColor: "#9b5de5"
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: "white" } }, y: { ticks: { color: "white" } } }
+    }
+  });
+</script>
+
+{% endif %}
+{% endblock %}

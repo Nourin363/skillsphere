@@ -1,0 +1,102 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+
+    <!-- Tailwind for Admin UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+
+<h1 class="text-3xl font-bold text-white mb-8">User Skills</h1>
+
+<!-- 🔍 SEARCH + APPLY BTN TOP ROW -->
+<form method="get" class="flex gap-4 items-center mb-6">
+    <input
+        type="text"
+        name="search"
+        value="{{ request.GET.search }}"
+        placeholder="🔍 Search by username or skill..."
+        class="flex-1 p-3 rounded-lg bg-[#1b1b29] text-white border border-[#34344d]
+               focus:ring-2 focus:ring-purple-500 outline-none shadow-[0_0_8px_rgba(138,43,226,0.25)]"
+    >
+
+    <button type="submit"
+        class="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold transition">
+        Apply Filters
+    </button>
+</form>
+
+<!-- ⚙ FILTER ROW (SMALLER & SMOOTH) -->
+<div class="flex flex-wrap gap-4 mb-10">
+
+    <input type="hidden" name="search" value="{{ request.GET.search }}"/>
+
+    <select name="skill"
+        class="flex-1 min-w-[200px] p-3 rounded-lg bg-[#1b1b29] text-white border border-[#34344d] focus:ring-2 focus:ring-purple-500 outline-none">
+        <option value="">All Skills</option>
+        {% for skill in skills %}
+        <option value="{{ skill.name }}" {% if request.GET.skill == skill.name %}selected{% endif %}>
+            {{ skill.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <select name="difficulty"
+        class="flex-1 min-w-[200px] p-3 rounded-lg bg-[#1b1b29] text-white border border-[#34344d] focus:ring-2 focus:ring-purple-500 outline-none">
+        <option value="">All Difficulty Levels</option>
+        <option value="Beginner" {% if request.GET.difficulty == 'Beginner' %}selected{% endif %}>Beginner</option>
+        <option value="Intermediate" {% if request.GET.difficulty == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+        <option value="Advanced" {% if request.GET.difficulty == 'Advanced' %}selected{% endif %}>Advanced</option>
+        <option value="Expert" {% if request.GET.difficulty == 'Expert' %}selected{% endif %}>Expert</option>
+    </select>
+
+    <select name="sort"
+        class="flex-1 min-w-[200px] p-3 rounded-lg bg-[#1b1b29] text-white border border-[#34344d] focus:ring-2 focus:ring-purple-500 outline-none"
+        onchange="this.form.submit()">
+        <option value="">Sort By</option>
+        <option value="username" {% if request.GET.sort == 'username' %}selected{% endif %}>Username (A–Z)</option>
+        <option value="-xp" {% if request.GET.sort == '-xp' %}selected{% endif %}>XP (High → Low)</option>
+        <option value="-level" {% if request.GET.sort == '-level' %}selected{% endif %}>Level (High → Low)</option>
+        <option value="-progress" {% if request.GET.sort == '-progress' %}selected{% endif %}>Progress (High → Low)</option>
+    </select>
+</div>
+
+<!-- 👤 USER CARDS -->
+{% if users %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% for user in users %}
+    <a href="{% url 'admin_user_skill_detail' user.id %}" class="block text-white no-underline">
+        <div class="bg-[#111121] p-6 rounded-xl
+                    shadow-[0_0_18px_rgba(138,43,226,0.35)]
+                    hover:shadow-[0_0_27px_rgba(138,43,226,0.6)]
+                    transition duration-300">
+
+            <h2 class="text-xl font-bold mb-4">{{ user.username }}</h2>
+
+            {% for us in user.userskill_set.all %}
+            <div class="mb-4">
+                <p class="text-md font-semibold">{{ us.skill.name }} — {{ us.difficulty }}</p>
+                <div class="w-full bg-gray-700 rounded-full h-3 mt-1 mb-1">
+                    <div class="bg-green-400 h-3 rounded-full" style="width: {{ us.progress }}%;"></div>
+                </div>
+                <span class="text-sm text-gray-300">{{ us.progress }}% • XP: {{ us.xp }} • Level: {{ us.level }}</span>
+            </div>
+            {% endfor %}
+
+        </div>
+    </a>
+    {% endfor %}
+
+</div>
+{% else %}
+<p class="text-gray-400 text-lg text-center mt-10">No skills assigned yet.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="min-h-screen bg-[#0b1220] text-white py-12 px-6">
+  <div class="max-w-5xl mx-auto bg-gray-900/70 p-8 rounded-2xl border border-gray-800 shadow-xl">
+
+    <h1 class="text-3xl font-bold mb-2">Quiz – {{ skill.name }}</h1>
+
+    {# ---------------- DIFFICULTY SELECTION ---------------- #}
+    {% if not difficulty and not results and not questions %}
+      <p class="text-gray-400 mb-6">Choose your difficulty level:</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <a href="?difficulty=Beginner" class="px-4 py-3 bg-green-700 rounded-lg text-center hover:bg-green-600">
+          Beginner
+        </a>
+        <a href="?difficulty=Intermediate" class="px-4 py-3 bg-blue-700 rounded-lg text-center hover:bg-blue-600">
+          Intermediate
+        </a>
+        <a href="?difficulty=Advanced" class="px-4 py-3 bg-purple-700 rounded-lg text-center hover:bg-purple-600">
+          Advanced
+        </a>
+        <a href="?difficulty=Expert" class="px-4 py-3 bg-red-700 rounded-lg text-center hover:bg-red-600">
+          Expert
+        </a>
+      </div>
+
+    {% elif no_questions %}
+      <p class="text-red-300 mt-6">No questions available for {{ difficulty }} level yet.</p>
+
+    {# ---------------- QUIZ FORM (GET with difficulty) ---------------- #}
+    {% elif questions and not results %}
+      <p class="text-gray-400 mb-4">
+        Difficulty: <span class="font-semibold">{{ difficulty }}</span> •
+        Questions: {{ total_questions }}
+      </p>
+
+      <form method="POST" class="space-y-6 mt-4">
+        {% csrf_token %}
+        <input type="hidden" name="difficulty" value="{{ difficulty }}">
+        <input type="hidden" name="question_ids" value="{{ questions|join:','|default:'' }}">
+
+        {% for q in questions %}
+          <div class="bg-gray-800/80 p-4 rounded-lg border border-gray-700">
+            <p class="font-semibold mb-2">Q{{ forloop.counter }}. {{ q.question_text }}</p>
+
+            <div class="space-y-2 mt-2">
+              <label class="block">
+                <input type="radio" name="answer_{{ q.id }}" value="A" required>
+                A) {{ q.option_a }}
+              </label>
+              <label class="block">
+                <input type="radio" name="answer_{{ q.id }}" value="B" required>
+                B) {{ q.option_b }}
+              </label>
+              <label class="block">
+                <input type="radio" name="answer_{{ q.id }}" value="C" required>
+                C) {{ q.option_c }}
+              </label>
+              <label class="block">
+                <input type="radio" name="answer_{{ q.id }}" value="D" required>
+                D) {{ q.option_d }}
+              </label>
+            </div>
+          </div>
+        {% endfor %}
+
+        <button type="submit"
+          class="mt-4 px-6 py-3 bg-green-600 rounded-lg text-white hover:bg-green-500">
+          Submit Quiz
+        </button>
+      </form>
+
+    {# ---------------- RESULTS (POST) ---------------- #}
+    {% elif results %}
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-2">Your Result</h2>
+        <p class="text-gray-300">
+          Score: <span class="font-semibold">{{ score }}</span> / {{ total_questions }}
+          ({{ percentage }}%)
+        </p>
+        <p class="text-gray-300 mt-1">
+          XP Earned: <span class="font-semibold">{{ total_xp_earned }}</span>
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {% for r in results %}
+          <div class="bg-gray-800/80 p-4 rounded-lg border border-gray-700">
+            <p class="font-semibold mb-2">
+              Q{{ forloop.counter }}. {{ r.question.question_text }}
+            </p>
+            <p class="text-sm">
+              Your answer:
+              <span class="{% if r.is_correct %}text-green-400{% else %}text-red-400{% endif %}">
+                {{ r.user_answer }}
+              </span>
+            </p>
+            <p class="text-sm text-gray-300">
+              Correct answer: <span class="font-semibold">{{ r.correct_answer }}</span>
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="flex items-center justify-between mt-8">
+        <a href="{% url 'skill_quiz' skill_slug=skill.slug %}"
+           class="px-5 py-2 bg-blue-700 rounded-lg hover:bg-blue-600">
+          Retake with another difficulty
+        </a>
+        <a href="{% url 'skill_practice' slug=skill.slug %}"
+           class="px-5 py-2 bg-gray-700 rounded-lg hover:bg-gray-600">
+          Back to Practice
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}

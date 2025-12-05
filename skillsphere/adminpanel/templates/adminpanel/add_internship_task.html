@@ -1,0 +1,115 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Internship Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+
+
+<h2 class="text-3xl font-bold text-white mb-6">➕ Add Internship Task</h2>
+
+<form method="POST" class="bg-[#111121] p-6 rounded-xl shadow-lg max-w-xl">
+    {% csrf_token %}
+
+    <!-- Internship Selection -->
+    <label class="text-gray-300 block mb-2">Internship</label>
+    <select name="internship" id="internshipDropdown"
+            class="w-full p-3 rounded bg-gray-800 text-white mb-4" required>
+        {% for i in internships %}
+            <option value="{{ i.id }}">{{ i.title }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- 🔥 Title Suggestions Based on Internship -->
+    <label class="text-gray-300 block mb-2">Task Title</label>
+    <select name="title" id="titleDropdown"
+            class="w-full p-3 rounded bg-gray-800 text-white mb-4" required>
+        <option value="">Select recommended task</option>
+    </select>
+
+    <!-- Description -->
+    <label class="text-gray-300 block mb-2">Description (optional)</label>
+    <textarea name="description"
+        class="w-full p-3 rounded bg-gray-800 text-white mb-4"
+        rows="4"></textarea>
+
+    <!-- Order -->
+    <label class="text-gray-300 block mb-2">Order (1, 2, 3…)</label>
+    <input type="number" name="order"
+           class="w-full p-3 rounded bg-gray-800 text-white mb-4"
+           value="1" required>
+
+    <!-- Reward Points -->
+    <label class="text-gray-300 block mb-2">Reward Points</label>
+    <input type="number" name="reward_points"
+           class="w-full p-3 rounded bg-gray-800 text-white mb-4"
+           value="10" required>
+
+    <button type="submit"
+            class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold">
+        Save Task
+    </button>
+</form>
+
+<!-- 🔥 Internship → Recommended Task Suggestions -->
+<script>
+    const suggestions = {
+        "Frontend Developer": [
+            "Create a responsive landing page",
+            "Build a portfolio site",
+            "Implement dark/light mode",
+            "Build a navbar + sidebar layout",
+            "Create card-based internship listing UI"
+        ],
+        "Backend Developer": [
+            "Create REST API endpoints",
+            "Authentication system",
+            "CRUD with permissions",
+            "Email verification API",
+            "File upload system"
+        ],
+        "Python Developer": [
+            "Write CSV file automation",
+            "Build web scraping script",
+            "Create Flask mini API",
+            "Exception & Logging task",
+            "Pandas data processing task"
+        ],
+        "UI/UX Intern": [
+            "Redesign dashboard layout",
+            "Prototype in Figma",
+            "Design card UI for tasks",
+            "Mobile UI layout",
+            "Create color palette + typography kit"
+        ]
+    };
+
+    const internshipDropdown = document.getElementById("internshipDropdown");
+    const titleDropdown = document.getElementById("titleDropdown");
+
+    function updateTitles() {
+        const internshipName = internshipDropdown.options[internshipDropdown.selectedIndex].text;
+        const topics = suggestions[internshipName] || [];
+        titleDropdown.innerHTML = `<option value="">Select recommended task</option>`;
+        topics.forEach(topic => {
+            titleDropdown.innerHTML += `<option value="${topic}">${topic}</option>`;
+        });
+    }
+
+    internshipDropdown.addEventListener("change", updateTitles);
+    updateTitles(); // auto-load first internship
+</script>
+<!-- 🔙 Back Button -->
+<div class="mt-10">
+    <a href="{% url 'manage_internships' %}"
+        class="inline-flex items-center px-4 py-2 mb-5 text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition">
+        ← Back
+    </a>
+</div>
+
+{% endblock %}

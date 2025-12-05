@@ -1,0 +1,59 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSphere Admin Panel</title>
+    <link rel="stylesheet" href="{% static 'css/adminpanel.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">SkillSphere<br>Admin</div>
+    <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+    <a href="{% url 'admin_skills' %}">📚 Manage Skills</a>
+    <a href="{% url 'manage_users' %}">👥 Manage Users</a>
+    <a href="{% url 'manage_internships' %}">💼 Internships</a>
+    <!-- <a href="#">📢 Send Updates</a> -->
+
+    <!-- PRACTICE QUESTIONS -->
+    <a href="{% url 'admin_questions' %}" class="nav-link">🧩 View Practice Questions</a>
+    <a href="{% url 'admin_add_question' %}" class="nav-link">➕ Add Practice Question</a>
+
+    <!-- STUDY MATERIALS -->
+    <a href="{% url 'admin_materials' %}" class="nav-link">📘 View Study Materials</a>
+    <a href="{% url 'admin_add_material' %}" class="nav-link">➕ Add Study Material</a>
+    <a href="{% url 'admin_leaderboard' %}" class="nav-link">🏆 Leaderboard</a>
+    <hr>
+    <a href="/" class="back-btn">🔙 Back to Site</a>
+    <a href="{% url 'admin_logout' %}"
+   class="flex items-center px-4 py-2 mt-4 text-white bg-red-600 hover:bg-red-700 rounded-lg transition">
+    🚪 Logout
+</a>
+</div>
+
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        {% for message in messages %}
+        const toast = document.createElement("div");
+        toast.innerText = "{{ message }}";
+        toast.className = "fixed bottom-6 right-6 bg-purple-600 text-white px-5 py-3 rounded-lg shadow-lg animate-pulse";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+        {% endfor %}
+    });
+</script>
+{% endif %}
+
+
+</body>
+</html>

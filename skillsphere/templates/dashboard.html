@@ -1,148 +1,128 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% load humanize %}
 
-<!-- 🌈 DASHBOARD SECTION -->
-<section class="min-h-[60vh] bg-gradient-to-br from-purple-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-300 py-16 px-6">
 
-  <!-- 👋 Welcome Banner -->
-  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-    
-    <!-- Left: Greeting -->
-    <div>
-      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white">
-        Welcome back, {{ user.first_name|default:user.username }} 👋
-      </h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">
-        Here’s an overview of your learning journey.
-      </p>
+<section class="main-content py-12">
+
+  <div class="max-w-6xl mx-auto px-6">
+    <h1 class="text-3xl font-extrabold text-white mb-6">Welcome back, {{ user.first_name|default:user.username }} 👋</h1>
+
+    <!-- top cards -->
+    <div class="cards mb-8">
+      <div class="card">
+        <h4 class="text-gray-300">Skills Added</h4>
+        <div class="text-3xl font-bold text-yellow-400">{{ skills_count }}</div>
+      </div>
+      <div class="card">
+        <h4 class="text-gray-300">Internships</h4>
+        <div class="text-3xl font-bold text-yellow-400">{{ internships_count }}</div>
+      </div>
+      <div class="card">
+        <h4 class="text-gray-300">Applications</h4>
+        <div class="text-3xl font-bold text-yellow-400">{{ applications_count }}</div>
+      </div>
+      <div class="card">
+        <h4 class="text-gray-300">Avg Progress</h4>
+        <div class="text-3xl font-bold text-yellow-400">{{ avg_progress }}%</div>
+      </div>
     </div>
 
-    <!-- Right: Profile Card -->
-    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 w-full max-w-sm flex items-center gap-4">
-      {% if user.profile.image %}
-        <img src="{{ user.profile.image.url }}" alt="Profile" class="w-16 h-16 rounded-full object-cover">
+    <!-- Chart -->
+    <div class="card mb-10">
+      <h2 class="text-xl text-gray-200 font-semibold mb-4">Skill Progress Overview</h2>
+      <canvas id="dashboardChart" height="120"></canvas>
+      <p id="no-data-msg" class="text-gray-400 mt-4" style="display:none;">No skills yet — add a skill to see progress.</p>
+    </div>
+
+    <!-- Skills list -->
+    <h2 class="text-2xl text-white font-semibold mt-8 mb-4">Your Skills</h2>
+    <div class="card">
+      {% if user_skills %}
+        {% for us in user_skills %}
+          <div class="mb-4 pb-3 border-b border-gray-700 flex items-center justify-between">
+            <div>
+              <a href="{% url 'skill_practice' us.skill.slug %}" class="text-yellow-400 font-semibold text-lg hover:underline">{{ us.skill.name }}</a>
+              <div class="text-sm text-gray-400">Updated {{ us.updated_at|naturaltime }}</div>
+            </div>
+
+            <div class="w-1/3 text-right">
+              <div class="progress-bar mb-1">
+                <span style="width: {{ us.progress }}%"></span>
+              </div>
+              <div class="text-sm text-gray-300">{{ us.progress }}%</div>
+
+              <div class="mt-2 inline-flex gap-2">
+                <!-- <a href="{% url 'edit_skill' us.id %}" class="px-3 py-1 rounded bg-gray-800 text-gray-200 text-sm">Edit</a> -->
+                <form method="post" action="{% url 'delete_skill' us.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button class="px-3 py-1 rounded bg-red-600 text-white text-sm" type="submit">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
       {% else %}
-        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center text-white text-2xl font-semibold">
-          {{ user.first_name|default:user.username|slice:":1" }}
-        </div>
+        <p class="text-gray-400">You haven't added any skills yet. Visit <a href="{% url 'skills' %}" class="text-yellow-400">Skills</a> to add your first skill.</p>
       {% endif %}
-      <div>
-        <p class="font-semibold text-gray-900 dark:text-white text-lg">{{ user.first_name|default:user.username }}</p>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">{{ user.email }}</p>
-        <a href="{% url 'edit_profile' %}" class="text-sm text-purple-600 hover:text-blue-600 dark:text-purple-400 font-medium mt-2 inline-block">
-          Edit Profile →
-        </a>
+    </div>
+
+    <!-- Recommended internships -->
+    <h2 class="text-2xl text-white font-semibold mt-10 mb-4">Recommended Micro-Internships</h2>
+    <div class="cards">
+      {% for internship in internships_count|yesno:"1,1" %}
+        <!-- placeholder - actual internships page is separate -->
+      {% endfor %}
+      <!-- show example card to guide user -->
+      <div class="card">
+        <h4 class="text-yellow-400">Frontend Developer</h4>
+        <p class="text-gray-400">Practice building UIs to earn points & badges.</p>
       </div>
-    </div>
-  </div>
-
-  <!-- 📊 Quick Stats -->
-  <div class="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12">
-    <div class="bg-blue-600 text-white rounded-2xl p-6 shadow hover:scale-105 transition transform">
-      <p class="text-sm opacity-90">Skills Tracked</p>
-      <h2 class="text-3xl font-bold mt-2">{{ total_skills|default:"0" }}</h2>
-    </div>
-    <div class="bg-purple-600 text-white rounded-2xl p-6 shadow hover:scale-105 transition transform">
-      <p class="text-sm opacity-90">XP Points</p>
-      <h2 class="text-3xl font-bold mt-2">{{ total_xp|default:"0" }}</h2>
-    </div>
-    <div class="bg-green-600 text-white rounded-2xl p-6 shadow hover:scale-105 transition transform">
-      <p class="text-sm opacity-90">Internships</p>
-      <h2 class="text-3xl font-bold mt-2">{{ total_internships|default:"0" }}</h2>
-    </div>
-  </div>
-
-  <!-- 🔥 SkillSphere Dashboard Preview -->
-  <div class="max-w-6xl mx-auto mt-16 grid md:grid-cols-2 gap-8 items-center fade-up delay-2">
-
-    <!-- Left: Dashboard Summary -->
-    <div class="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white rounded-2xl shadow-xl p-6 hover:scale-[1.02] transition transform duration-300">
-      <h3 class="text-xl font-semibold mb-4">Dashboard Summary</h3>
-
-      <div class="grid grid-cols-3 gap-4 text-center">
-        <div>
-          <p class="text-3xl font-bold">{{ total_skills|default:'0' }}</p>
-          <p class="text-sm opacity-90">Skills</p>
-        </div>
-        <div>
-          <p class="text-3xl font-bold">{{ total_internships|default:'0' }}</p>
-          <p class="text-sm opacity-90">Internships</p>
-        </div>
-        <div>
-          <p class="text-3xl font-bold">{{ total_xp|default:'0' }}</p>
-          <p class="text-sm opacity-90">XP</p>
-        </div>
-      </div>
-
-      <div class="mt-6 bg-white/30 rounded-full h-3 overflow-hidden">
-        <div class="bg-white/90 h-3 rounded-full transition-all duration-500"
-             style="width: {{ total_xp|default:'0'|divisibleby:10 }}%">
-        </div>
-      </div>
-
-      <p class="text-sm mt-2 text-white/90">Keep learning — you’re doing great!</p>
-    </div>
-
-    <!-- Right: Chart Preview -->
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Skill Progress Overview</h3>
-      <canvas id="skillChartMain" class="w-full h-48"></canvas>
     </div>
   </div>
 </section>
 
-<!-- 📈 Chart.js Integration -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const ctx = document.getElementById('skillChartMain');
+async function loadChart() {
+  const resp = await fetch("{% url 'skill_data' %}");
+  if (!resp.ok) return;
+  const json = await resp.json();
+  const labels = json.labels;
+  const values = json.values;
 
-  // Dynamic data from Django
-  const skillLabels = JSON.parse('{{ skill_names|safe|escapejs }}');
-  const skillData = JSON.parse('{{ skill_progress|safe|escapejs }}');
+  if (!labels.length) {
+    document.getElementById('no-data-msg').style.display = 'block';
+  }
 
-  // Generate color gradients dynamically based on progress
-  const colors = skillData.map(value => {
-    if (value >= 80) return 'rgba(16, 185, 129, 0.8)';      // Green
-    if (value >= 50) return 'rgba(99, 102, 241, 0.8)';      // Blue
-    if (value >= 25) return 'rgba(147, 51, 234, 0.8)';      // Purple
-    return 'rgba(239, 68, 68, 0.8)';                        // Red
-  });
-
-  new Chart(ctx, {
+  const ctx = document.getElementById('dashboardChart').getContext('2d');
+  if (window.__dashboardChart) window.__dashboardChart.destroy();
+  window.__dashboardChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: skillLabels.length ? skillLabels : ['No Skills Yet'],
+      labels,
       datasets: [{
         label: 'Progress (%)',
-        data: skillData.length ? skillData : [0],
+        data: values,
+        backgroundColor: values.map(v => v === 0 ? 'rgba(148,163,184,0.35)' : '#8b5cf6'),
+        borderColor: '#8b5cf6',
         borderWidth: 1,
-        backgroundColor: colors,
-        borderRadius: 6,
+        borderRadius: 6
       }]
     },
     options: {
-      plugins: { 
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#1e1e2f',
-          titleColor: '#fff',
-          bodyColor: '#ddd'
-        }
-      },
+      responsive: true,
       scales: {
-        y: {
-          beginAtZero: true,
-          ticks: { color: '#ccc' },
-          grid: { color: 'rgba(255,255,255,0.1)' }
-        },
-        x: {
-          ticks: { color: '#ccc' },
-          grid: { display: false }
-        }
-      }
+        y: { beginAtZero: true, max: 100, ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+        x: { ticks: { color: '#9ca3af' }, grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
     }
   });
+}
+
+loadChart();
 </script>
 
 {% endblock %}

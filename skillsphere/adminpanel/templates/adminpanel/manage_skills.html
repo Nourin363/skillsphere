@@ -1,0 +1,240 @@
+{% extends "adminpanel/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h2 class="title">🧠 Skill Management</h2>
+
+<div class="grid-container">
+
+    <!-- Add Skill Form -->
+    <div class="form-card">
+        <h3>➕ Add Skill</h3>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label>Skill Name</label>
+            <input type="text" name="name" placeholder="e.g., Python, HTML, Time Management" required>
+
+            <label>Description</label>
+            <textarea name="description" rows="3" placeholder="Short description of this skill"></textarea>
+
+            <div class="row-2">
+                <div class="row-2">
+    <div>
+        <label>Category</label>
+        <select name="category" required>
+            <option value="programming">Programming</option>
+            <option value="web">Web Development</option>
+            <option value="data">Data Science</option>
+            <option value="database">Database</option>
+            <option value="cloud">Cloud & DevOps</option>
+            <option value="design">UI/UX & Design</option>
+            <option value="soft">Soft Skill</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+    </div>
+
+
+                <!-- <div>
+                    <label>Difficulty</label>
+                    <select name="difficulty">
+                        {% for value,label in difficulties %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div> -->
+            </div>
+
+            <label>Skill Icon (Devicon)</label>
+            <select name="icon">
+                <option value="">-- Select Devicon Icon --</option>
+                <option value="devicon-python-plain">Python</option>
+                <option value="devicon-django-plain">Django</option>
+                <option value="devicon-html5-plain">HTML5</option>
+                <option value="devicon-css3-plain">CSS3</option>
+                <option value="devicon-javascript-plain">JavaScript</option>
+                <option value="devicon-react-original">React</option>
+                <option value="devicon-nodejs-plain">Node.js</option>
+                <option value="devicon-java-plain">Java</option>
+                <option value="devicon-cplusplus-plain">C++</option>
+                <option value="devicon-git-plain">Git</option>
+                <option value="devicon-figma-plain">Figma</option>
+            </select>
+            
+            <!-- Custom icon input if not in list -->
+            <input type="text" name="icon_custom" placeholder="Or paste Devicon class manually (optional)">
+
+
+            <button type="submit" class="btn-save">💾 Save Skill</button>
+        </form>
+    </div>
+
+    <!-- Skill List -->
+    <div class="list-card">
+        <h3>📋 Existing Skills</h3>
+
+        {% if skills %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th style="text-align:center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for s in skills %}
+                <tr>
+                    <td>
+                        {% if s.icon %}
+                        <i class="{{ s.icon }} colored skill-icon"></i>
+                        {% else %}
+                        <span class="placeholder-icon">★</span>
+                        {% endif %}
+
+                    </td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.get_category_display }}</td>
+                    <td>{{ s.get_difficulty_display }}</td>
+                    <td style="text-align:center;">
+                        <a href="{% url 'delete_skill' s.id %}"
+                           class="btn-delete"
+                           onclick="return confirm('Delete skill {{ s.name }}?');">
+                            🗑
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="empty">No skills added yet.</div>
+        {% endif %}
+    </div>
+
+</div>
+
+<style>
+.title {
+    margin-bottom: 25px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr;
+    gap: 30px;
+}
+
+/* Form card */
+.form-card input,
+.form-card textarea,
+.form-card select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    background: #162238;
+    color: #fff;
+    margin-bottom: 16px; /* added spacing below each field */
+    font-size: 15px;
+}
+
+.form-card label {
+    font-weight: 600;
+    margin: 8px 0 4px 0;  /* more space above and below label */
+    display: inline-block;
+}
+
+.row-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px; /* spacing between fields */
+}
+
+.form-card {
+    background: #111a2c;
+    padding: 32px; /* more padding */
+    border-radius: 18px;
+    display: grid;
+    gap: 10px;
+}
+
+
+.btn-save {
+    margin-top: 6px;
+    background: #ffca2c;
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    color: #000;
+}
+.btn-save:hover { background: #e1b21c; }
+
+/* List card */
+.list-card {
+    background: #111a2c;
+    padding: 24px;
+    border-radius: 16px;
+}
+.list-card h3 { margin-bottom: 12px; }
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.styled-table th, .styled-table td {
+    padding: 10px 12px;
+}
+.styled-table thead {
+    background: #1c2b4a;
+}
+.styled-table tbody tr:nth-child(even) {
+    background: #16203a;
+}
+.styled-table tbody tr:hover {
+    background: #223053;
+}
+
+.skill-icon {
+    font-size: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #222b45;
+    font-size: 14px;
+}
+
+.btn-delete {
+    background: #d9534f;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+}
+.btn-delete:hover { background: #c0392b; }
+
+.empty {
+    padding: 30px;
+    text-align: center;
+    color: #b2c2ff;
+}
+</style>
+
+{% endblock %}
