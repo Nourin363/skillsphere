@@ -1,0 +1,191 @@
+/* ================================
+   SKILLSPHERE ADMIN — FINAL THEME
+   Layout unchanged | Only visuals upgraded
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Background */
+body {
+    background: radial-gradient(circle at top right, #1f1d47, #0d0f1a 60%, #05060d 100%);
+    color: #e6e6e6;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 220px;
+    background: linear-gradient(180deg, #15172c, #0c0d1b);
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 24px;
+    color: white;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 4px 0 18px rgba(0,0,0,0.4);
+}
+
+.sidebar .logo {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 45px;
+    background: linear-gradient(90deg, #9b6dff, #4da6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 0;
+    color: #d8d8d8;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    color: #ffca28;
+    transform: translateX(4px);
+}
+
+.sidebar hr {
+    border: 0.5px solid rgba(255,255,255,0.12);
+    margin: 25px 0;
+}
+
+.sidebar .back-btn {
+    margin-top: 25px;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    background: transparent;
+    border: 1px solid #ffca28;
+    border-radius: 6px;
+    color: #ffca28;
+}
+.sidebar .back-btn:hover {
+    background: #ffca2870;
+}
+
+/* ===== MAIN CONTENT ===== */
+.content {
+    margin-left: 240px;
+    padding: 40px;
+}
+
+/* Dashboard Title */
+.dashboard-title {
+    font-size: 35px;
+    font-weight: 700;
+    margin-bottom: 38px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #ffce54, #a47cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ===== STATS CARDS ===== */
+.stats-row {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 45px;
+}
+
+.stat-card {
+    width: 230px;
+    background: rgba(27, 30, 47, 0.85);
+    backdrop-filter: blur(7px);
+    color: white;
+    border-radius: 12px;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 0 14px rgba(120, 60, 255, 0.22);
+    border: 1px solid rgba(255,255,255,0.07);
+    transition: 0.3s;
+}
+.stat-card:hover {
+    box-shadow: 0 0 22px rgba(140, 90, 255, 0.42);
+    transform: translateY(-4px);
+}
+
+.stat-card span {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.stat-card h2 {
+    margin-top: 12px;
+    font-size: 34px;
+}
+
+/* ===== QUICK ACTIONS ===== */
+.quick-title {
+    font-size: 22px;
+    margin-bottom: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Buttons row */
+.quick-row {
+    display: flex;
+    gap: 25px;
+}
+
+/* Universal button base */
+.quick-btn {
+    padding: 16px 28px;
+    border-radius: 8px;
+    font-size: 17px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    position: relative;
+    transition: 0.25s;
+    animation: pulse 2.8s infinite ease-in-out;
+}
+
+/* Button colors */
+.quick-btn.blue  { background: #516bff; }
+.quick-btn.green { background: #4baf78; }
+.quick-btn.yellow { background: #eab542; }
+
+/* Subtle default glow */
+.quick-btn {
+    box-shadow: 0 0 10px rgba(255,255,255,0.12);
+}
+
+/* Neon glow on hover */
+.quick-btn:hover {
+    box-shadow: 0 0 18px rgba(148, 80, 255, 0.70);
+    transform: translateY(-3px);
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(255,255,255,0.12); }
+    50%     { box-shadow: 0 0 22px rgba(255,255,255,0.22); }
+}
+
+.devicon {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+
+    a {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+    

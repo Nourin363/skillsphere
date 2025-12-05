@@ -1,0 +1,214 @@
+/* SkillSphere Full Style.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+body {
+    background: #f5f7fa;
+    color: #333;
+}
+.navbar {
+    background-color: #1a237e;
+    color: white;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-weight: 700;
+    font-size: 1.4em;
+}
+.nav-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+.nav-links a:hover {
+    color: #ffca28;
+}
+.hero {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #3949ab, #5c6bc0);
+    color: white;
+    text-align: center;
+    flex-direction: column;
+}
+.hero h1 {
+    font-size: 2.8em;
+    margin-bottom: 10px;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #ffca28;
+    color: #1a237e;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.btn:hover {
+    background: #ffb300;
+}
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #1a237e;
+    color: white;
+}
+/* Dashboard Sidebar */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background-color: #1a237e;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: white;
+    padding: 20px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    margin: 15px 0;
+}
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+    color: #ffca28;
+}
+.main-content {
+    margin-left: 240px;
+    padding: 30px;
+}
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    min-width: 250px;
+}
+/* Chatbot */
+/* -------------------------------------------------- */
+/*  CHATBOT MENTOR (AI Assistant Widget) */
+/* -------------------------------------------------- */
+
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    width: 320px;
+    background: var(--chat-bg, #fff);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chatbot-header {
+    background: var(--chat-header-bg, #1a237e);
+    color: var(--chat-header-color, #fff);
+    text-align: center;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.chatbot-messages {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--chat-msg-bg, #fafafa);
+}
+
+.chatbot-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: var(--chat-input-bg, #fff);
+}
+
+.chatbot-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+.chatbot-input button {
+    background: var(--chat-btn-bg, #1a237e);
+    color: var(--chat-btn-color, #fff);
+    border: none;
+    padding: 8px 12px;
+    margin-left: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.chatbot-input button:hover {
+    background: var(--chat-btn-hover, #3949ab);
+}
+
+/* Chat Messages */
+.chatbot-message {
+    max-width: 80%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* User Messages (Right Side) */
+.chatbot-message.user {
+    background: var(--chat-user-bg, #e8eaf6);
+    color: var(--chat-user-color, #000);
+    align-self: flex-end;
+}
+
+/* Bot Messages (Left Side) */
+.chatbot-message.bot {
+    background: var(--chat-bot-bg, #c5cae9);
+    color: var(--chat-bot-color, #000);
+    align-self: flex-start;
+}
+
+/* Scrollbar Customization */
+.chatbot-messages::-webkit-scrollbar {
+    width: 6px;
+}
+.chatbot-messages::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+

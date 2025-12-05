@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+
+<defs>
+  <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#8B5CF6"/>
+    <stop offset="100%" stop-color="#3B82F6"/>
+  </linearGradient>
+</defs>
+<style>
+  .bg { fill: #0f172a; }
+  .ring { fill: url(#g); opacity: 0.12; }
+  .label { fill: white; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; font-weight:700; }
+  .glow { filter: drop-shadow(0 0 14px rgba(139,92,246,0.55)); }
+  @keyframes pulse { 0% { filter: drop-shadow(0 0 10px rgba(139,92,246,0.45)); } 50% { filter: drop-shadow(0 0 22px rgba(59,130,246,0.8)); } 100% { filter: drop-shadow(0 0 10px rgba(139,92,246,0.45)); } }
+  .anim { animation: pulse 3s ease-in-out infinite; }
+</style>
+
+<rect width="100%" height="100%" rx="28" class="bg"/>
+<circle cx="128" cy="120" r="74" class="ring"/>
+<g class="glow anim" transform="translate(0,6)">
+  <rect x="96" y="88" width="64" height="56" rx="6" fill="white" opacity="0.95"/>
+  <rect x="102" y="96" width="52" height="10" rx="3" fill="#0f172a"/>
+  <rect x="102" y="110" width="36" height="10" rx="3" fill="#0f172a"/>
+</g>
+<text x="50%" y="90%" text-anchor="middle" class="label" font-size="20">SQL</text>
+</svg>
